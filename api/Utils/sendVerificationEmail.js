@@ -1,4 +1,15 @@
-const { createMailTrasporter } = require("./createMailTransporter");
+const nodemailer = require("nodemailer");
+
+const createMailTrasporter = () => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.email,
+      pass: process.env.emailpass,
+    },
+  });
+  return transporter;
+};
 
 exports.sendVerificationMail = (user) => {
   const transporter = createMailTrasporter();
@@ -8,7 +19,7 @@ exports.sendVerificationMail = (user) => {
     to: user.email,
     subject: "Verify your email",
     html: `<p>Hello ${user.name}, verify your email by clicking this link...</p>
-    <a href='${process.env.domain}/verify-email?emailToken=${user.emailToken}'>Verify your email</a>`,
+    <a href='${process.env.fd}/verify-email?emailToken=${user.emailToken}'>Verify your email</a>`,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

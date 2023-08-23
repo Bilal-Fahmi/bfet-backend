@@ -37,6 +37,7 @@ exports.UserSignup = async (userData, uuid) => {
 
 exports.UserLogin = async (userData, password) => {
   const userExist = await User.findOne({ email: userData.email });
+  console.log(userExist);
   if (!userExist) throw new Error("Invaild credentials");
   if (userExist.status === "Blocked")
     throw new BlockedUserError("Blocked User");
@@ -44,17 +45,20 @@ exports.UserLogin = async (userData, password) => {
     return userExist;
 };
 
-exports.VerifyEmail = async (uuid) => {
+exports.VerifyEmail = async (emailToken) => {
   try {
+    
     const updatedUser = await User.findOneAndUpdate(
-      { uuid: uuid },
+    
+      { emailToken: emailToken },
       { $set: { isVerified: true, emailToken: null } },
       { new: true }
     );
+      console.log(updatedUser);
     if (!updatedUser) {
       throw new Error(`User with UUID ${uuid} not found`);
     }
-    return updatedUser;
+    return true
   } catch (error) {
     console.error(`Error updating user verfication for UUID ${uuid} `, error);
     throw error;

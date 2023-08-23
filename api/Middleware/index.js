@@ -7,6 +7,6 @@ exports.checkUser = (req, res, next) => {
     const token = req.header.authorization;
     if(!token) throw new UnauthorizedError('unauthorized')
   } catch (error) {
-
+    console.log(error);
   }
 }

@@ -1,11 +1,11 @@
 const User = require("../Model/UserModel");
 
-exports.UpdateUser = (uuid, isblock) => {
+exports.UpdateUser = async (uuid, iSBlock) => {
   try {
-    if (typeof isblock != "boolean") throw new Error();
-    const user = User.findOneAndUpdate(
+    if (typeof iSBlock != "boolean") throw new Error();
+    const user = await User.findOneAndUpdate(
       { uuid: uuid },
-      { $set: { isblock: isblock } },
+      { $set: { iSBlock: iSBlock } },
       { new: true }
     );
     if (!user) {
@@ -35,3 +35,17 @@ exports.ViewExpert = () => {
     console.log(error);
   }
 };
+
+exports.ViewKycRequests = () => {
+  try {
+    const user = User.find({
+      role: "user",
+      filename: { $ne: " " },
+    });
+    return user
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+

@@ -1,11 +1,16 @@
-const { UpdateUser, ViewUser, ViewExpert } = require("../services/admin");
+const {
+  UpdateUser,
+  ViewUser,
+  ViewExpert,
+  ViewKycRequests,
+} = require("../services/admin");
 
 exports.UserStatus = async (req, res) => {
   try {
-    const { isblock, uuid } = req.body;
-    const user = await UpdateUser(uuid, isblock);
+    const { iSBlock, uuid } = req.body;
+    const user = await UpdateUser(uuid, iSBlock);
     if (!user) throw new Error("Can't update user status");
-    res.json({ user });
+    res.json({ success: true, user });
   } catch (error) {
     console.log(error);
   }
@@ -32,3 +37,23 @@ exports.Experts = async (req, res) => {
     console.log(error);
   }
 };
+
+exports.KycRequests = async (req, res) => {
+  try {
+    const user = await ViewKycRequests();
+    if (!user || user.length == 0) throw new Error("No kyc requests found");
+    res.json({ user });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.SendKycLink = async (req, res) => {
+  try {
+    const{email} = req.params
+    console.log(email);
+    
+  } catch (error) {
+    console.log(error);
+  }
+}

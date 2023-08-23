@@ -55,6 +55,9 @@ const userSchema = new mongoose.Schema({
   emailToken: {
     type: String,
   },
+  filename: {
+    type: String,
+  },
 });
 
 const User = mongoose.model("User", userSchema);
