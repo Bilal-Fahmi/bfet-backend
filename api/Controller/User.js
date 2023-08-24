@@ -20,6 +20,8 @@ exports.filemanage = async (req, res) => {
     if (!user) throw new Error("File not saved");
     res.json({ success: "Filed saved" });
   } catch (error) {
+    res.json({ error: error.message })
+    
     console.log(error);
   }
 };
