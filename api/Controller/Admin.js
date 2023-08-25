@@ -1,3 +1,5 @@
+const User = require("../Model/UserModel");
+const { sendVideoCallVerificationlink } = require("../Utils/sendVerificationEmail");
 const {
   UpdateUser,
   ViewUser,
@@ -50,7 +52,11 @@ exports.KycRequests = async (req, res) => {
 
 exports.SendKycLink = async (req, res) => {
   try {
-    const{email} = req.params
+    const { email } = req.params
+    const user = await User.findOne({ email: email })
+    if (!user) throw new Error("User not found")
+    console.log(user);
+    sendVideoCallVerificationlink(user)
     console.log(email);
     
   } catch (error) {

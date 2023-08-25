@@ -12,6 +12,6 @@ router.get("/users", Users);
 router.get("/experts", Experts);
 router.get("/kyc-requests", KycRequests);
 router.post("/status", UserStatus);
-router.get("/kyc-link/:email",SendKycLink)
+router.post("/kyc-link/:email",SendKycLink)
 
 module.exports = router;

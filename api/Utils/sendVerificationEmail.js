@@ -30,3 +30,22 @@ exports.sendVerificationMail = (user) => {
     }
   });
 };
+
+exports.sendVideoCallVerificationlink = (user) => {
+  console.log(user);
+  const transporter = createMailTrasporter()
+  const mailOptions = {
+    from: `b'fet'<${process.env.email}>`,
+    to: user.email,
+    subject: "Video call verification",
+    html: `<p>Hello ${user.name}, verify your expert application by clicking this link...</p>
+    <a href='${process.env.fd}/verification'>Join Video call</a>`,
+  }
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Video call verification link sent");
+    }
+  })
+}
