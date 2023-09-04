@@ -58,6 +58,9 @@ const userSchema = new mongoose.Schema({
   filename: {
     type: String,
   },
+  selectedOption: {
+    type:String
+  }
 });
 
 const User = mongoose.model("User", userSchema);

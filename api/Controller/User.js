@@ -15,8 +15,9 @@ exports.profile = async (req, res) => {
 exports.filemanage = async (req, res) => {
   const { _id } = req.params;
   const filename = req.file.filename;
+  const selectedOption = req.body.selectedOption
   try {
-    const user = await saveFileNameExpert(_id, filename);
+    const user = await saveFileNameExpert(_id, filename,selectedOption);
     if (!user) throw new Error("File not saved");
     res.json({ success: "Filed saved" });
   } catch (error) {

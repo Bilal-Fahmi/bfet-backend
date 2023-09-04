@@ -4,14 +4,16 @@ const {
   Users,
   Experts,
   UserStatus,
-  KycRequests,
-  SendKycLink
+  VerificationRequests,
+  SendVerificatonLink,
+  ChangeRole
 } = require("../Controller/Admin");
 
 router.get("/users", Users);
 router.get("/experts", Experts);
-router.get("/kyc-requests", KycRequests);
+router.get("/verification-requests", VerificationRequests);
 router.post("/status", UserStatus);
-router.post("/kyc-link/:email",SendKycLink)
+router.post("/verification-link", SendVerificatonLink)
+router.post("/update-role",ChangeRole)
 
 module.exports = router;

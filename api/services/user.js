@@ -6,13 +6,13 @@ exports.userProfile = (_id) => {
   return user;
 };
 
-exports.saveFileNameExpert = async (_id, filename) => {
+exports.saveFileNameExpert = async (_id, filename, selectedOption) => {
   const user = await User.findOne({ _id: _id });
   if (user.filename) throw new Error("User verification under process");
   console.log(user.filename);
   const updatedUser = await User.findByIdAndUpdate(
     { _id: _id },
-    { $set: { filename: filename } },
+    { $set: { filename: filename ,selectedOption: selectedOption} },
     { new: true }
   );
 
