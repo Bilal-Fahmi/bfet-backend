@@ -13,6 +13,7 @@ console.log(process.env.dbURL);
 require("./api/Config/database");
 
 app.use(morgan("dev"));
+console.log(__dirname);
 app.use(
   cors({
     origin: [process.env.fd],
@@ -23,7 +24,7 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "Public")));
+app.use(express.static(path.join(__dirname, "/api/Public")));
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/", index);

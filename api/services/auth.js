@@ -20,6 +20,7 @@ const verifyPassword = async (password, hashpassword) => {
   return result;
 };
 
+// User signup
 exports.UserSignup = async (userData, uuid) => {
   const userExist = await User.findOne({ email: userData.email });
   if (userExist) throw new UserAlreadyExistError("User already exist");
@@ -35,6 +36,7 @@ exports.UserSignup = async (userData, uuid) => {
   return newUser;
 };
 
+// User login
 exports.UserLogin = async (userData, password) => {
   const userExist = await User.findOne({ email: userData.email });
   console.log(userExist);
@@ -45,6 +47,7 @@ exports.UserLogin = async (userData, password) => {
     return userExist;
 };
 
+// To verify email after user clicking verify email that sent to their email
 exports.VerifyEmail = async (emailToken) => {
   try {
     

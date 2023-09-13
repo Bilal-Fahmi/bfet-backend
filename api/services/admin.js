@@ -1,5 +1,6 @@
 const User = require("../Model/UserModel");
 
+// To update user status
 exports.UpdateUser = async (uuid, iSBlock) => {
   if (typeof iSBlock != "boolean") throw new Error();
   const user = await User.findOneAndUpdate(
@@ -12,6 +13,7 @@ exports.UpdateUser = async (uuid, iSBlock) => {
   }
 };
 
+// To display user
 exports.ViewUser = () => {
   const users = User.find({ role: "user" });
   return users;
@@ -19,11 +21,13 @@ exports.ViewUser = () => {
 
 // -------------------------------------- Experts ----------------------------------------------------
 
+// To display expert
 exports.ViewExpert = () => {
   const experts = User.find({ role: "expert" });
   return experts;
 };
 
+// To display verification requests
 exports.ViewKycRequests = () => {
   const user = User.find({
     role: "user",
@@ -32,6 +36,7 @@ exports.ViewKycRequests = () => {
   return user;
 };
 
+// To update user role to expert after verification
 exports.UpdateRole = (email) => {
   const user = User.findOneAndUpdate(
     { email: email },

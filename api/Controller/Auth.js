@@ -4,6 +4,7 @@ const { generateUUID } = require("../Utils/helper");
 const { verifyToken, generateToken } = require("../Utils/jwt");
 const { sendVerificationMail } = require("../Utils/sendVerificationEmail");
 
+//Signup
 exports.signup = async (req, res) => {
   try {
     console.log(req.body);
@@ -22,18 +23,17 @@ exports.signup = async (req, res) => {
   }
 };
 
+// Login
 exports.login = async (req, res) => {
   try {
     const { error, value } = LoginSchema.validate(req.body);
     if (error) throw new Error(error.details[0].message);
     let user = await UserLogin(value, value.password);
-    
+    console.log(user);
     if (!user) {
-      throw new Error("User login failed or returned an empty result");
+      throw new Error("User login failed");
     }
     let token = await generateToken({ _id: user._id, role: user.role });
-
-    
     res.json({ success: "Signned  in", token, user });
   } catch (error) {
     res.json({ error: error.message });
@@ -41,6 +41,7 @@ exports.login = async (req, res) => {
   }
 };
 
+// To sent verifylink to the user email
 exports.verifyLink = async (req, res) => {
   const { emailToken } = req.body;
   try {
@@ -52,6 +53,7 @@ exports.verifyLink = async (req, res) => {
   }
 };
 
+// Forgot password
 exports.forgotpass = async (req, res) => {
   const { emailToken } = req.body;
   try {

@@ -10,6 +10,7 @@ const {
   UpdateRole,
 } = require("../services/admin");
 
+// To updated user status
 exports.UserStatus = async (req, res) => {
   try {
     const { iSBlock, uuid } = req.body;
@@ -21,6 +22,7 @@ exports.UserStatus = async (req, res) => {
   }
 };
 
+// To display users
 exports.Users = async (req, res) => {
   try {
     const users = await ViewUser();
@@ -33,6 +35,7 @@ exports.Users = async (req, res) => {
 
 // -------------------------------------- Experts ----------------------------------------------------
 
+// To display experts
 exports.Experts = async (req, res) => {
   try {
     const experts = await ViewExpert();
@@ -43,6 +46,7 @@ exports.Experts = async (req, res) => {
   }
 };
 
+// To display verification requests
 exports.VerificationRequests = async (req, res) => {
   try {
     const user = await ViewKycRequests();
@@ -53,6 +57,7 @@ exports.VerificationRequests = async (req, res) => {
   }
 };
 
+// To sent verification call link to user email
 exports.SendVerificatonLink = async (req, res) => {
   try {
     const email = req.body.email;
@@ -66,12 +71,13 @@ exports.SendVerificatonLink = async (req, res) => {
   }
 };
 
+// To change the role of user to expert after verification
 exports.ChangeRole = async (req, res) => {
   try {
     const email = req.body.email;
     const user = await UpdateRole(email);
-    if (!user) throw new Error("Role not updated"); 
-    res.json({success:"Role updated"})
+    if (!user) throw new Error("Role not updated");
+    res.json({ success: "Role updated" });
   } catch (error) {
     console.log(error);
   }
