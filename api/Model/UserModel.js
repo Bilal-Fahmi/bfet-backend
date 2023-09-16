@@ -31,19 +31,6 @@ const userSchema = new mongoose.Schema({
   profile: {
     type: String,
   },
-  address: [
-    {
-      house: { type: String },
-      area: { type: String },
-      landmark: { type: String },
-      pincode: { type: String },
-      city: { type: String },
-      state: { type: String },
-      phone: { type: String },
-      email: { type: String },
-      name: { type: String },
-    },
-  ],
   uuid: {
     type: String,
     required: true,
@@ -59,8 +46,13 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   selectedOption: {
-    type:String
-  }
+    type: String,
+  },
+  slots: [
+    {
+      type: String,
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);

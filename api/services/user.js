@@ -25,7 +25,6 @@ exports.saveFileNameExpert = async (_id, filename, selectedOption) => {
 
 // To upload expert description
 exports.updateDescp = async (_id, descripiton) => {
-  const user = await User.findOne({ _id: _id });
   const updatedUser = await User.findOneAndUpdate(
     { _id: _id },
     { $set: { descripiton: descripiton } },
@@ -74,8 +73,32 @@ exports.viewBlogs = async () => {
 
 // To fetch single blog post for the db
 exports.singleBlog = async (_id) => {
-  // console.log(_id,'herehrer');
-  const singleBlog = await Blog.findById({ _id: _id })
-  if (!singleBlog) throw new Error(`Blog with this ${_id} not found`)
-  return singleBlog
-}
+  const singleBlog = await Blog.findById({ _id: _id });
+  if (!singleBlog) throw new Error(`Blog with this ${_id} not found`);
+  return singleBlog;
+};
+
+// To update the slots that is given by the expert in db
+exports.updateSlot = async (_id, slots) => {
+  const slotArray = slots.slots;
+  const expertSlot = await User.findByIdAndUpdate(
+    { _id: _id },
+    { $set: { slots: slotArray } },
+    { new: true }
+  );
+  return expertSlot;
+};
+
+// To fetch single expert data from the db for expert booking page
+exports.singleExpert = async (_id) => {
+  const expert = await User.findById({ _id: _id });
+  return expert;
+};
+
+// To fetch single expert blogs form db
+exports.singleExpBlog = async (_id) => {
+  const expBlog = await Blog.findOne({
+    author: _id,
+  });
+  return expBlog
+};

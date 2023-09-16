@@ -7,6 +7,9 @@ const {
   createBlog,
   viewBlogs,
   singleBlog,
+  updateSlot,
+  singleExpert,
+  singleExpBlog,
 } = require("../services/user");
 const fs = require("fs");
 
@@ -55,7 +58,6 @@ exports.updateDescripiton = async (req, res) => {
 exports.mindexp = async (req, res) => {
   try {
     const expert = await mindexp();
-    console.log(expert);
     if (!res) throw new Error("Experts not available");
     res.json({ expert });
   } catch (error) {
@@ -67,7 +69,6 @@ exports.mindexp = async (req, res) => {
 exports.bodyexp = async (req, res) => {
   try {
     const expert = await bodyexp();
-    console.log(expert);
     if (!res) throw new Error("Experts not available");
   } catch (error) {
     console.log(error);
@@ -81,7 +82,6 @@ exports.createBlog = async (req, res) => {
     const { _id } = req.params;
     const { title, summary, content } = req.body;
     const { filename } = req.file;
-    console.log(filename, "pathhh");
     const blog = await createBlog(_id, title, summary, content, filename);
     res.json({ success: "Blog created" });
   } catch (error) {
@@ -94,20 +94,56 @@ exports.viewBlog = async (req, res) => {
   try {
     const blogs = await viewBlogs();
     if (!blogs) throw new Error("Blogs not available");
-    console.log(blogs);
     res.json({ blogs });
   } catch (error) {
     console.log(error);
-  } 
+  }
 };
 
 // To view specific blog
-exports.singleblog = async(req, res)=> {
+exports.singleblog = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const blog = await singleBlog(_id);
+    if (!blog) throw new Error(`Blog with this ${_id} not found`);
+    res.json({ blog });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// To update the slots the is selected by the expert
+exports.expertSlots = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const slot = req.body;
+    const Slots = await updateSlot(_id, slot);
+    if (!Slots) throw new Error("Expert slot not updated");
+    res.json({ success: "Slots updated" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// To show expert data on the booking page
+exports.expertBooking = async (req, res) => {
   try {
     const { _id } = req.params
-    const blog = await singleBlog(_id)
-    if (!blog) throw new Error(`Blog with this ${_id} not found`)
-    res.json({blog})
+    const expert = await singleExpert(_id)
+    if (!expert) throw new Error(`Expert with id ${_id} not found`)
+    res.json({expert })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// To show single expert blog in booking page
+exports.singleExpBlog = async (req, res) => {
+  try {
+    const { _id } = req.params
+    const expBlog = await singleExpBlog(_id)
+    if (!expBlog) throw new Error("Expert blogs not found")
+    res.json({expBlog})
   } catch (error) {
     console.log(error);
   }
