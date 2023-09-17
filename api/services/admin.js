@@ -1,3 +1,4 @@
+const Blog = require("../Model/BlogSchema");
 const User = require("../Model/UserModel");
 
 // To update user status
@@ -44,4 +45,9 @@ exports.UpdateRole = (email) => {
     { new: true }
   );
   return user;
+};
+
+exports.expBlogs = () => {
+  const Blogs = Blog.find({ isBlock: false });
+  return Blogs;
 };

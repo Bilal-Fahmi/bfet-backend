@@ -102,3 +102,9 @@ exports.singleExpBlog = async (_id) => {
   });
   return expBlog
 };
+
+// To fetch author name from db
+exports.expertName = async (_id) => {
+  const expert = await User.findById({ _id: _id })
+  return expert
+}

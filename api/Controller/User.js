@@ -10,8 +10,9 @@ const {
   updateSlot,
   singleExpert,
   singleExpBlog,
+  expertName,
 } = require("../services/user");
-const fs = require("fs");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // User profile
 exports.profile = async (req, res) => {
@@ -128,23 +129,63 @@ exports.expertSlots = async (req, res) => {
 // To show expert data on the booking page
 exports.expertBooking = async (req, res) => {
   try {
-    const { _id } = req.params
-    const expert = await singleExpert(_id)
-    if (!expert) throw new Error(`Expert with id ${_id} not found`)
-    res.json({expert })
+    const { _id } = req.params;
+    const expert = await singleExpert(_id);
+    if (!expert) throw new Error(`Expert with id ${_id} not found`);
+    res.json({ expert });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 // To show single expert blog in booking page
 exports.singleExpBlog = async (req, res) => {
   try {
-    const { _id } = req.params
-    const expBlog = await singleExpBlog(_id)
-    if (!expBlog) throw new Error("Expert blogs not found")
-    res.json({expBlog})
+    const { _id } = req.params;
+    const expBlog = await singleExpBlog(_id);
+    if (!expBlog) throw new Error("Expert blogs not found");
+    res.json({ expBlog });
   } catch (error) {
     console.log(error);
   }
-}
+};
+
+// To show expert name in blog page
+exports.expertName = async (req, res) => {
+  try {
+    console.log(req.params);
+    const { _id } = req.params;
+    const expert = await expertName(_id);
+    if (!expert) throw new Error("Expert not found");
+    res.json({ expert });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// To send stripe PUBLISHABLE key to frontend
+exports.stripePublicKey = (req, res) => {
+  try {
+    res.json({
+      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//
+exports.paymentIntent = async (req, res) => {
+  const amount = 2000;
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      currency: "inr",
+      amount: amount,
+      payment_method_type: [ card ],
+    });
+    const clientSecret=paymentIntent.client_secret
+    res.json({ clientSecret,message:"Payment initiated successfully" });
+  } catch (error) {
+    console.log(error);
+  }
+};

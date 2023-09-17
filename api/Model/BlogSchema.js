@@ -25,6 +25,10 @@ const blogSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  isBlock: {
+    type: Boolean,
+    default:false
+  }
 });
 
 const Blog = mongoose.model("Blog", blogSchema);

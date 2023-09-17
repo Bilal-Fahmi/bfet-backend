@@ -53,6 +53,12 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
   ],
+  profile: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
 });
 
 const User = mongoose.model("User", userSchema);

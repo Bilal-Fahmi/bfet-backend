@@ -8,6 +8,7 @@ const {
   ViewExpert,
   ViewKycRequests,
   UpdateRole,
+  expBlogs,
 } = require("../services/admin");
 
 // To updated user status
@@ -78,6 +79,17 @@ exports.ChangeRole = async (req, res) => {
     const user = await UpdateRole(email);
     if (!user) throw new Error("Role not updated");
     res.json({ success: "Role updated" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// To display blogs posted by experts
+exports.expBlogs = async (req, res) => {
+  try {
+    const blogs = await expBlogs();
+    if (!blogs) throw new Error("Blogs not found");
+    res.json({ blogs });
   } catch (error) {
     console.log(error);
   }
