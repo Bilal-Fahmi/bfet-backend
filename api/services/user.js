@@ -100,11 +100,23 @@ exports.singleExpBlog = async (_id) => {
   const expBlog = await Blog.findOne({
     author: _id,
   });
-  return expBlog
+  return expBlog;
 };
 
 // To fetch author name from db
 exports.expertName = async (_id) => {
-  const expert = await User.findById({ _id: _id })
-  return expert
-}
+  const expert = await User.findById({ _id: _id });
+  return expert;
+};
+
+// To update user subscription
+exports.userSubscribe = async (_id, session_id) => {
+  console.log(_id, "iid");
+  console.log(session_id, "sessin");
+  const user = await User.findByIdAndUpdate(
+    { _id: _id },
+    { $set: { checkoutSessionId: session_id } },
+    { new: true }
+  );
+  return user;
+};

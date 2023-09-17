@@ -11,8 +11,9 @@ const {
   singleExpert,
   singleExpBlog,
   expertName,
+  userSubscribe,
 } = require("../services/user");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripe = require("stripe")("sk_test_51NqZrESBo809HwkAeqxG8SUIYiJiPuYUXrzD8kXTNbkz7VoBAD2yHZbeHI9bmq3BTD7w1gF7rU3YxuwQln8YzrAv00w4RytBws");
 
 // User profile
 exports.profile = async (req, res) => {
@@ -175,16 +176,39 @@ exports.stripePublicKey = (req, res) => {
 };
 
 //
-exports.paymentIntent = async (req, res) => {
-  const amount = 2000;
+// const basic = process.env.PLAN_ID
+const basic = "price_1NrHWoSBo809HwkAH8ftqxjA";
+const stripeSession = async (plan) => {
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      currency: "inr",
-      amount: amount,
-      payment_method_type: [ card ],
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price: plan,
+          quantity: 1,
+        },
+      ],
+      success_url: "http://localhost:5173/success",
+      cancel_url: "http://localhost:5173/cancel",
     });
-    const clientSecret=paymentIntent.client_secret
-    res.json({ clientSecret,message:"Payment initiated successfully" });
+    return session;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.subscriptionCheckoutSession = async (req, res) => {
+  try {
+    const user_id = req.params._id;
+    const session = await stripeSession(basic);
+    if (session) {
+      const updateUser = await userSubscribe(user_id,session.id );
+      return res.json({ session });
+    } else {
+      console.error("Stripe session is undefined");
+      return res.json("Stripe session is undefined");
+    }
   } catch (error) {
     console.log(error);
   }

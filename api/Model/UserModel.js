@@ -31,6 +31,25 @@ const userSchema = new mongoose.Schema({
   profile: {
     type: String,
   },
+  planDuration: {
+    type: Number,
+  },
+  planStartDate: {
+    type: Date,
+  },
+  planEndDate: {
+    type: Date,
+  },
+  planId: {
+    type: String,
+  },
+  planType: {
+    type: String,
+    default: "Basic",
+  },
+  checkoutSessionId: {
+    type: String,
+  },
   uuid: {
     type: String,
     required: true,
