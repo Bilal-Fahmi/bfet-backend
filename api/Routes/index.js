@@ -17,6 +17,8 @@ const {
   stripePublicKey,
   paymentIntent,
   subscriptionCheckoutSession,
+  sessionId,
+  paymentSuccess,
 } = require("../Controller/User");
 const upload = require("../Middleware/multer");
 
@@ -28,7 +30,7 @@ router.post("/update-descripiton", updateDescripiton);
 router.post("/createBlog/:_id", upload.single("files"), createBlog);
 router.post("/expert-slots/:_id", expertSlots)
 router.post("/subscription-checkout-session/:_id",subscriptionCheckoutSession)
-// router.post("/paymentIntent",paymentIntent)
+router.post("/payment-success",paymentSuccess)
 
 router.get("/profile/:_id", profile);
 router.get("/mindexp", mindexp);
@@ -38,6 +40,7 @@ router.get("/expert-booking/:_id", expertBooking)
 router.get("/expert-blog/:_id", singleExpBlog)
 router.get("/expert-name/:_id", expertName)
 router.get("/stripe-key", stripePublicKey)
+router.get("/checkout-sessionId/:_id",sessionId)
 
 router.patch("/verify-link", verifyLink);
 

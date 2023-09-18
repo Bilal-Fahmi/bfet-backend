@@ -111,11 +111,41 @@ exports.expertName = async (_id) => {
 
 // To update user subscription
 exports.userSubscribe = async (_id, session_id) => {
-  console.log(_id, "iid");
-  console.log(session_id, "sessin");
   const user = await User.findByIdAndUpdate(
     { _id: _id },
     { $set: { checkoutSessionId: session_id } },
+    { new: true }
+  );
+  return user;
+};
+
+// To fetch stripe checkout session id from db
+exports.sessionId = async (_id) => {
+  const user = await User.findById(_id).select("checkoutSessionId");
+  return user;
+};
+
+// Finding user by ID
+exports.findingUserById = async (_id) => {
+  const user = await User.findById({ _id: _id });
+  return user;
+};
+
+// To update user subscription status
+exports.updateSubscription = async (_id, updatedUser) => {
+  console.log(updatedUser);
+  const user = await User.findOneAndUpdate(
+    { _id: _id },
+    {
+      $set: {
+        checkoutSessionId: null,
+        planId: updatedUser.planId,
+        planType: updatedUser.planType,
+        planDuration: updatedUser.planDuration,
+        planStartDate: updatedUser.startDate,
+        planEndDate: updatedUser.endDate,
+      },
+    },
     { new: true }
   );
   return user;

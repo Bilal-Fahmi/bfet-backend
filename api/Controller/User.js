@@ -12,8 +12,14 @@ const {
   singleExpBlog,
   expertName,
   userSubscribe,
+  sessionId,
+  findingUserById,
+  updateSubscription,
 } = require("../services/user");
-const stripe = require("stripe")("sk_test_51NqZrESBo809HwkAeqxG8SUIYiJiPuYUXrzD8kXTNbkz7VoBAD2yHZbeHI9bmq3BTD7w1gF7rU3YxuwQln8YzrAv00w4RytBws");
+const moment = require("moment");
+const stripe = require("stripe")(
+  "sk_test_51NqZrESBo809HwkAeqxG8SUIYiJiPuYUXrzD8kXTNbkz7VoBAD2yHZbeHI9bmq3BTD7w1gF7rU3YxuwQln8YzrAv00w4RytBws"
+);
 
 // User profile
 exports.profile = async (req, res) => {
@@ -197,17 +203,70 @@ const stripeSession = async (plan) => {
     console.log(error);
   }
 };
-
+// To set checkout session Id to user
 exports.subscriptionCheckoutSession = async (req, res) => {
   try {
     const user_id = req.params._id;
     const session = await stripeSession(basic);
     if (session) {
-      const updateUser = await userSubscribe(user_id,session.id );
+      const updateUser = await userSubscribe(user_id, session.id);
       return res.json({ session });
     } else {
       console.error("Stripe session is undefined");
       return res.json("Stripe session is undefined");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// To fetch stripe checkout session from db
+exports.sessionId = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const session_id = await sessionId(_id);
+    if (!session_id) throw new Error("Checkout session not found");
+    res.json({ session_id });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Stripe subscription logic
+exports.paymentSuccess = async (req, res) => {
+  const { sessionId, user_id } = req.body;
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    if (session.payment_status === "paid") {
+      const subscriptionId = session.subscription;
+     
+        const subscription = await stripe.subscriptions.retrieve(
+          subscriptionId
+        );
+        const user = await findingUserById(user_id);
+        const planId = subscription.plan.id;
+        const planType = basic;
+        const startDate = moment
+          .unix(subscription.current_period_start)
+          .format("YYYY-MM-DD");
+        const endDate = moment
+          .unix(subscription.current_period_end)
+          .format("YYYY-MM-DD");
+        const durationInSeconds =
+          subscription.current_period_end - subscription.current_period_start;
+        const durationInDays = moment
+          .duration(durationInSeconds, "seconds")
+          .asDays();
+        const updatedUser = {
+          planId: planId,
+          startDate: startDate,
+          endDate:endDate,
+          planType: planType,
+          planDuration:durationInDays
+        };
+        await updateSubscription(user_id,updatedUser);
+        return res.json({updatedUser, success: "Payment Successfully completed" });
+   
     }
   } catch (error) {
     console.log(error);
