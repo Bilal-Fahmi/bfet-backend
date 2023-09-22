@@ -133,7 +133,6 @@ exports.findingUserById = async (_id) => {
 
 // To update user subscription status
 exports.updateSubscription = async (_id, updatedUser) => {
-  console.log(updatedUser);
   const user = await User.findOneAndUpdate(
     { _id: _id },
     {
@@ -149,4 +148,13 @@ exports.updateSubscription = async (_id, updatedUser) => {
     { new: true }
   );
   return user;
+};
+
+exports.userProfilepic = (_id, filename) => {
+  const user = User.findByIdAndUpdate(
+    { _id: _id },
+    { $set: { profile: filename } },
+    { new: true }
+  );
+  return user
 };

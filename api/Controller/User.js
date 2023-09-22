@@ -15,6 +15,7 @@ const {
   sessionId,
   findingUserById,
   updateSubscription,
+  userProfilepic,
 } = require("../services/user");
 const moment = require("moment");
 const stripe = require("stripe")(
@@ -239,35 +240,47 @@ exports.paymentSuccess = async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     if (session.payment_status === "paid") {
       const subscriptionId = session.subscription;
-     
-        const subscription = await stripe.subscriptions.retrieve(
-          subscriptionId
-        );
-        const user = await findingUserById(user_id);
-        const planId = subscription.plan.id;
-        const planType = basic;
-        const startDate = moment
-          .unix(subscription.current_period_start)
-          .format("YYYY-MM-DD");
-        const endDate = moment
-          .unix(subscription.current_period_end)
-          .format("YYYY-MM-DD");
-        const durationInSeconds =
-          subscription.current_period_end - subscription.current_period_start;
-        const durationInDays = moment
-          .duration(durationInSeconds, "seconds")
-          .asDays();
-        const updatedUser = {
-          planId: planId,
-          startDate: startDate,
-          endDate:endDate,
-          planType: planType,
-          planDuration:durationInDays
-        };
-        await updateSubscription(user_id,updatedUser);
-        return res.json({updatedUser, success: "Payment Successfully completed" });
-   
+
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      const user = await findingUserById(user_id);
+      const planId = subscription.plan.id;
+      const planType = basic;
+      const startDate = moment
+        .unix(subscription.current_period_start)
+        .format("YYYY-MM-DD");
+      const endDate = moment
+        .unix(subscription.current_period_end)
+        .format("YYYY-MM-DD");
+      const durationInSeconds =
+        subscription.current_period_end - subscription.current_period_start;
+      const durationInDays = moment
+        .duration(durationInSeconds, "seconds")
+        .asDays();
+      const updatedUser = {
+        planId: planId,
+        startDate: startDate,
+        endDate: endDate,
+        planType: planType,
+        planDuration: durationInDays,
+      };
+      await updateSubscription(user_id, updatedUser);
+      return res.json({
+        updatedUser,
+        success: "Payment Successfully completed",
+      });
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.profilePic = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const { filename } = req.file;
+    const profilePic = await userProfilepic(_id, filename);
+    if (!profilePic) throw new Error("Profile pic not uploaded");
+    res.json({ success: "Uploaded successfully" });
   } catch (error) {
     console.log(error);
   }
