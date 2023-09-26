@@ -3,6 +3,7 @@ const { SignupSchema, LoginSchema } = require("../Validation/joiSchema");
 const { generateUUID } = require("../Utils/helper");
 const { verifyToken, generateToken } = require("../Utils/jwt");
 const { sendVerificationMail } = require("../Utils/sendVerificationEmail");
+const { UserAlreadyExistError } = require("../Error/Error");
 
 //Signup
 exports.signup = async (req, res) => {
@@ -19,7 +20,7 @@ exports.signup = async (req, res) => {
     res.json({ success: "Account created" });
   } catch (error) {
     res.json({ error: error.message });
-    console.log(error);
+    console.log(error.message);
   }
 };
 

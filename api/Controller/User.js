@@ -16,6 +16,7 @@ const {
   findingUserById,
   updateSubscription,
   userProfilepic,
+  AllExperts,
 } = require("../services/user");
 const moment = require("moment");
 const stripe = require("stripe")(
@@ -79,10 +80,21 @@ exports.bodyexp = async (req, res) => {
   try {
     const expert = await bodyexp();
     if (!res) throw new Error("Experts not available");
+    res.json({expert})
   } catch (error) {
     console.log(error);
   }
 };
+
+exports.allexp = async (req, res) => {
+  try {
+    const expert = await AllExperts()
+    if (!res) throw new Error("Experts not available");
+    res.json({expert})
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 // To create blog when needed by expert
 exports.createBlog = async (req, res) => {
@@ -164,6 +176,7 @@ exports.expertName = async (req, res) => {
     console.log(req.params);
     const { _id } = req.params;
     const expert = await expertName(_id);
+    console.log(expert);
     if (!expert) throw new Error("Expert not found");
     res.json({ expert });
   } catch (error) {

@@ -20,6 +20,7 @@ const {
   sessionId,
   paymentSuccess,
   profilePic,
+  bodyexp,
 } = require("../Controller/User");
 const upload = require("../Middleware/multer");
 
@@ -36,6 +37,7 @@ router.post("/profilePic/:_id",upload.single("profilePic"), profilePic)
 
 router.get("/profile/:_id", profile);
 router.get("/mindexp", mindexp);
+router.get("/bodyexp",bodyexp)
 router.get("/view-blogs", viewBlog)
 router.get("/blog/:_id", singleblog)
 router.get("/expert-booking/:_id", expertBooking)

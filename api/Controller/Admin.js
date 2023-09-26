@@ -1,4 +1,5 @@
 const User = require("../Model/UserModel");
+const { generateToken } = require("../Utils/jwt");
 const {
   sendVideoCallVerificationlink,
 } = require("../Utils/sendVerificationEmail");
@@ -9,7 +10,24 @@ const {
   ViewKycRequests,
   UpdateRole,
   expBlogs,
+  BlogStatusBlock,
+  BlogStatusUnblock,
 } = require("../services/admin");
+
+// Admin Login
+exports.AdminLogin = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const { password } = req.body;
+    if (email === process.env.adminMail && password === process.env.adminPass) {
+      let token = await generateToken({ role: "admin" });
+      res.json({ success: "Signned in", token });
+    }
+  } catch (error) {
+    res.json({ error: "Invalid Credentials" });
+    console.log(error);
+  }
+};
 
 // To updated user status
 exports.UserStatus = async (req, res) => {
@@ -90,6 +108,32 @@ exports.expBlogs = async (req, res) => {
     const blogs = await expBlogs();
     if (!blogs) throw new Error("Blogs not found");
     res.json({ blogs });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// To block the blogs
+exports.blogStatusBlock = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    console.log(_id);
+    const blogs = await BlogStatusBlock(_id);
+    if (!blogs) throw new Error("Blog status not updated");
+    res.json({ success: "Blog blocked successfully" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// To unblock the blogs
+exports.blogStatusUnblock = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    console.log(_id);
+    const blogs = await BlogStatusUnblock(_id);
+    if (!blogs) throw new Error("Blog status not updated");
+    res.json({ success: "Blog unblocked successfully" });
   } catch (error) {
     console.log(error);
   }

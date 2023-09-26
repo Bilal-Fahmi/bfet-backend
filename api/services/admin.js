@@ -48,6 +48,24 @@ exports.UpdateRole = (email) => {
 };
 
 exports.expBlogs = () => {
-  const Blogs = Blog.find({ isBlock: false });
+  const Blogs = Blog.find();
   return Blogs;
+};
+
+exports.BlogStatusBlock = (blog_id) => {
+  const blog = Blog.findByIdAndUpdate(
+    { _id: blog_id },
+    { isBlock: true },
+    { new: true }
+  );
+  return blog
+};
+
+exports.BlogStatusUnblock = (blog_id) => {
+  const blog = Blog.findByIdAndUpdate(
+    { _id: blog_id },
+    { isBlock: false },
+    { new: true }
+  );
+  return blog
 };

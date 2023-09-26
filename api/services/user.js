@@ -51,6 +51,15 @@ exports.bodyexp = async () => {
   return expert;
 };
 
+// To find all the expert in the db
+exports.AllExperts = async () => {
+  const expert = await User.find({
+    role:"expert"
+  })
+  if (!expert) throw new Error("Experts not found");
+  return expert;
+}
+
 // To add blogs to the db taking in expert id, title, summmary, content and img path of the blog
 exports.createBlog = async (_id, title, summary, content, filename) => {
   const newBlog = new Blog({
@@ -66,7 +75,7 @@ exports.createBlog = async (_id, title, summary, content, filename) => {
 
 // To fetch the blogs posted by the experts from the db
 exports.viewBlogs = async () => {
-  const blogs = await Blog.find();
+  const blogs = await Blog.find({ isBlock: false });
   if (!blogs) throw new Error("Blogs not available");
   return blogs;
 };
@@ -156,5 +165,5 @@ exports.userProfilepic = (_id, filename) => {
     { $set: { profile: filename } },
     { new: true }
   );
-  return user
+  return user;
 };
