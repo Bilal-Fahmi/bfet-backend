@@ -54,11 +54,11 @@ exports.bodyexp = async () => {
 // To find all the expert in the db
 exports.AllExperts = async () => {
   const expert = await User.find({
-    role:"expert"
-  })
+    role: "expert",
+  });
   if (!expert) throw new Error("Experts not found");
   return expert;
-}
+};
 
 // To add blogs to the db taking in expert id, title, summmary, content and img path of the blog
 exports.createBlog = async (_id, title, summary, content, filename) => {
@@ -167,3 +167,38 @@ exports.userProfilepic = (_id, filename) => {
   );
   return user;
 };
+
+exports.findSlots = async (date) => {
+ 
+  try {
+    const targetDate = new Date(date);
+  
+    const nextDay = new Date(targetDate);
+    nextDay.setDate(targetDate.getDate() + 1);
+    const result = await User.find({
+      slots: { $gte: targetDate, $lt: nextDay },
+    }).exec(); 
+    if (result.length > 0) {
+      const slots = result[0].slots
+      return slots
+
+    } else {
+      return "No slots found"
+    }
+    
+  } catch (error) {
+    console.log(error,"fekkl");
+  }
+};
+
+// To save user booked slot
+exports.BookedSlot = async (slot, userId) => {
+  
+  const updatedUser = await User.findByIdAndUpdate(
+    { _id: userId },
+    { $set: { slots: slot } },
+    {new:true}
+  )
+  console.log(updatedUser,"hiii");
+  return updatedUser
+}

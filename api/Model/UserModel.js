@@ -69,7 +69,7 @@ const userSchema = new mongoose.Schema({
   },
   slots: [
     {
-      type: String,
+      type: Date,
     },
   ],
   profile: {

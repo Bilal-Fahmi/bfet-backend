@@ -17,6 +17,8 @@ const {
   updateSubscription,
   userProfilepic,
   AllExperts,
+  findSlots,
+  BookedSlot,
 } = require("../services/user");
 const moment = require("moment");
 const stripe = require("stripe")(
@@ -298,3 +300,29 @@ exports.profilePic = async (req, res) => {
     console.log(error);
   }
 };
+
+// To get the available slots
+exports.slots = async (req, res) => {
+  try {
+    const { date } = req.params
+    const slots = await findSlots(date)
+    res.json({slots})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// To confirm user booked slot
+exports.ConfirmSlot = async (req, res) => {
+  try {
+    const { slot } = req.body
+    console.log(slot);
+    const { userId } = req.body
+    console.log(slot);
+    const confirm = await BookedSlot(slot, userId)
+    if (!confirm) throw new Error("Slot not confirmed")
+    res.json({success:"Slot booked successfully"})
+  } catch (error) {
+    console.log(error);
+  }
+}
