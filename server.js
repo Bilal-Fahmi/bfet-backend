@@ -16,9 +16,7 @@ app.use(morgan("dev"));
 console.log(__dirname);
 app.use(
   cors({
-    origin: [process.env.fd],
-    methods: ["GET", "POST", "PATCH", "DELETE"],
-    credentials: true,
+    origin: '*'
   })
 );
 
