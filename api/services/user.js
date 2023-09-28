@@ -8,7 +8,7 @@ exports.userProfile = (_id) => {
   return user;
 };
 
-// To save docs and selected option (mind or body)
+// To save docs and selected option (mind or body
 exports.saveFileNameExpert = async (_id, filename, selectedOption) => {
   const user = await User.findOne({ _id: _id });
   if (user.filename) throw new Error("User verification under process");
