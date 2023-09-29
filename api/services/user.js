@@ -61,12 +61,12 @@ exports.AllExperts = async () => {
 };
 
 // To add blogs to the db taking in expert id, title, summmary, content and img path of the blog
-exports.createBlog = async (_id, title, summary, content, filename) => {
+exports.createBlog = async (_id, title, summary, content, url) => {
   const newBlog = new Blog({
     title: title,
     summary: summary,
     content: content,
-    coverImg: filename,
+    coverImg: url,
     author: _id,
   });
   newBlog.save();
@@ -201,4 +201,14 @@ exports.BookedSlot = async (slot, userId) => {
   )
   console.log(updatedUser,"hiii");
   return updatedUser
+}
+
+// To save image link in the db
+exports.saveImgLink = async (_id,url)=>{
+  const updateUser = await User.findByIdAndUpdate(
+    { _id: _id },
+    { profile: url },
+    {new:true}
+  )
+  return updateUser
 }

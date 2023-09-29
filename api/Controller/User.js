@@ -19,11 +19,13 @@ const {
   AllExperts,
   findSlots,
   BookedSlot,
+  saveImgLink,
 } = require("../services/user");
 const moment = require("moment");
 const stripe = require("stripe")(
   "sk_test_51NqZrESBo809HwkAeqxG8SUIYiJiPuYUXrzD8kXTNbkz7VoBAD2yHZbeHI9bmq3BTD7w1gF7rU3YxuwQln8YzrAv00w4RytBws"
 );
+const uploadimage = require("../Middleware/cloudinary");
 
 // User profile
 exports.profile = async (req, res) => {
@@ -82,7 +84,7 @@ exports.bodyexp = async (req, res) => {
   try {
     const expert = await bodyexp();
     if (!res) throw new Error("Experts not available");
-    res.json({expert})
+    res.json({ expert });
   } catch (error) {
     console.log(error);
   }
@@ -90,22 +92,24 @@ exports.bodyexp = async (req, res) => {
 
 exports.allexp = async (req, res) => {
   try {
-    const expert = await AllExperts()
+    const expert = await AllExperts();
     if (!res) throw new Error("Experts not available");
-    res.json({expert})
+    res.json({ expert });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 // To create blog when needed by expert
 exports.createBlog = async (req, res) => {
   try {
-    console.log(req.file);
+   
+    
     const { _id } = req.params;
+    console.log(req.body.title);
     const { title, summary, content } = req.body;
-    const { filename } = req.file;
-    const blog = await createBlog(_id, title, summary, content, filename);
+    const url = await uploadimage(req.body.image);
+    const blog = await createBlog(_id, title, summary, content, url);
     res.json({ success: "Blog created" });
   } catch (error) {
     console.log(error);
@@ -304,25 +308,32 @@ exports.profilePic = async (req, res) => {
 // To get the available slots
 exports.slots = async (req, res) => {
   try {
-    const { date } = req.params
-    const slots = await findSlots(date)
-    res.json({slots})
+    const { date } = req.params;
+    const slots = await findSlots(date);
+    res.json({ slots });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 // To confirm user booked slot
 exports.ConfirmSlot = async (req, res) => {
   try {
-    const { slot } = req.body
+    const { slot } = req.body;
     console.log(slot);
-    const { userId } = req.body
+    const { userId } = req.body;
     console.log(slot);
-    const confirm = await BookedSlot(slot, userId)
-    if (!confirm) throw new Error("Slot not confirmed")
-    res.json({success:"Slot booked successfully"})
+    const confirm = await BookedSlot(slot, userId);
+    if (!confirm) throw new Error("Slot not confirmed");
+    res.json({ success: "Slot booked successfully" });
   } catch (error) {
     console.log(error);
   }
-}
+};
+
+exports.uploadImage = async (req, res) => {
+  const { _id } = req.params;
+  const url = await uploadimage(req.body.image);
+  const saveImg = await saveImgLink(_id, url);
+  console.log(saveImg,"ooooo");
+};

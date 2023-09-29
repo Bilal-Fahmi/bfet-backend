@@ -7,6 +7,7 @@ const index = require("./api/Routes/index");
 const admin = require("./api/Routes/AdminRoute");
 const morgan = require("morgan");
 
+
 require("dotenv").config();
 console.log(process.env.dbURL);
 
@@ -20,17 +21,17 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(express.json({limit:"25mb"}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "/api/Public")));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true ,limit:"25mb"}));
 
 app.use("/", index);
 app.use("/admin", admin);
 app.use("*", (req, res) => {
   res.json({ message: "route not available" });
 });
-// app.use('/admin',admin)
+
 
 app.listen(8000, () => {
   console.log("server on port 8000");
