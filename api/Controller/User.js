@@ -156,6 +156,7 @@ exports.expertSlots = async (req, res) => {
 exports.expertBooking = async (req, res) => {
   try {
     const { _id } = req.params;
+    console.log(_id);
     const expert = await singleExpert(_id);
     if (!expert) throw new Error(`Expert with id ${_id} not found`);
     res.json({ expert });
@@ -172,6 +173,7 @@ exports.singleExpBlog = async (req, res) => {
     if (!expBlog) throw new Error("Expert blogs not found");
     res.json({ expBlog });
   } catch (error) {
+    res.json({error})
     console.log(error);
   }
 };

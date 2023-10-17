@@ -17,7 +17,7 @@ exports.signup = async (req, res) => {
       throw new Error("User registration failed or returned an empty result");
     }
     sendVerificationMail(user);
-    res.json({ success: "Account created" });
+    res.json({ success: "Verification Email sent" });
   } catch (error) {
     res.json({ error: error.message });
     console.log(error.message);

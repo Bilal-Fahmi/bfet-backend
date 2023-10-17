@@ -100,7 +100,7 @@ exports.updateSlot = async (_id, slots) => {
 
 // To fetch single expert data from the db for expert booking page
 exports.singleExpert = async (_id) => {
-  const expert = await User.findById({ _id: _id });
+  const expert = await User.findOne({ _id: _id });
   return expert;
 };
 

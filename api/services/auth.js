@@ -40,6 +40,9 @@ exports.UserSignup = async (userData, uuid) => {
 exports.UserLogin = async (userData, password) => {
   const userExist = await User.findOne({ email: userData.email });
   console.log(userExist);
+  if (userExist.isVerified === false) {
+    throw new Error("Email is not verified")
+  }
   if (!userExist) throw new Error("Invaild credentials");
   if (userExist.status === "Blocked")
     throw new BlockedUserError("Blocked User");
@@ -59,11 +62,11 @@ exports.VerifyEmail = async (emailToken) => {
     );
       console.log(updatedUser);
     if (!updatedUser) {
-      throw new Error(`User with UUID ${uuid} not found`);
+      throw new Error(`User with email token ${emailToken} not found`);
     }
     return true
   } catch (error) {
-    console.error(`Error updating user verfication for UUID ${uuid} `, error);
+    console.error(`Error updating user verfication for emailToken ${emailToken} `, error);
     throw error;
   }
 };

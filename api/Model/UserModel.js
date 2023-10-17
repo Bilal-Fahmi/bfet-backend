@@ -45,7 +45,6 @@ const userSchema = new mongoose.Schema({
   },
   planType: {
     type: String,
-    default: "Basic",
   },
   checkoutSessionId: {
     type: String,
