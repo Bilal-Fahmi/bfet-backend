@@ -87,14 +87,18 @@ exports.singleBlog = async (_id) => {
   return singleBlog;
 };
 
-// To update the slots that is given by the expert in db
-exports.updateSlot = async (_id, slots) => {
+// To create slots that is given by the expert in db
+exports.createSlot = async (_id, slots) => {
   const slotArray = slots.slots;
-  const expertSlot = await User.findByIdAndUpdate(
-    { _id: _id },
-    { $set: { slots: slotArray } },
-    { new: true }
-  );
+  const expert = await User.findById(_id)
+  // Check if the selected slots are in the future and not for the same date
+  const currentTime = new Date()
+  const filteredSlots = slotArray.filter((slot) => {
+    const slotTime = new Date(slot)
+    return slotTime > currentTime
+  })
+  expert.slots = [...expert.slots, ...filteredSlots]
+  const expertSlot = await User.save()
   return expertSlot;
 };
 

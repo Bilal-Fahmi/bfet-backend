@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const slotSchema = require("./SlotSchema");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -68,7 +69,8 @@ const userSchema = new mongoose.Schema({
   },
   slots: [
     {
-      type: Date,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Slot",
     },
   ],
   profile: {

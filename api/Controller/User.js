@@ -7,7 +7,7 @@ const {
   createBlog,
   viewBlogs,
   singleBlog,
-  updateSlot,
+  createSlot,
   singleExpert,
   singleExpBlog,
   expertName,
@@ -139,16 +139,16 @@ exports.singleblog = async (req, res) => {
   }
 };
 
-// To update the slots the is selected by the expert
+// To create slots that is selected by the expert
 exports.expertSlots = async (req, res) => {
   try {
     const { _id } = req.params;
     const slot = req.body;
-    const Slots = await updateSlot(_id, slot);
+    const Slots = await createSlot(_id, slot);
     if (!Slots) throw new Error("Expert slot not updated");
     res.json({ success: "Slots updated" });
   } catch (error) {
-    console.log(error);
+    console.log(error); 
   }
 };
 
