@@ -60,7 +60,6 @@ exports.filemanage = async (req, res) => {
 
 // To update expert description
 exports.updateDescripiton = async (req, res) => {
-  console.log(req);
   try {
     const user = await updateDescp();
   } catch (error) {
@@ -103,10 +102,7 @@ exports.allexp = async (req, res) => {
 // To create blog when needed by expert
 exports.createBlog = async (req, res) => {
   try {
-   
-    
     const { _id } = req.params;
-    console.log(req.body.title);
     const { title, summary, content } = req.body;
     const url = await uploadimage(req.body.image);
     const blog = await createBlog(_id, title, summary, content, url);
@@ -148,7 +144,7 @@ exports.expertSlots = async (req, res) => {
     if (!Slots) throw new Error("Expert slot not updated");
     res.json({ success: "Slots updated" });
   } catch (error) {
-    console.log(error); 
+    console.log(error);
   }
 };
 
@@ -156,7 +152,6 @@ exports.expertSlots = async (req, res) => {
 exports.expertBooking = async (req, res) => {
   try {
     const { _id } = req.params;
-    console.log(_id);
     const expert = await singleExpert(_id);
     if (!expert) throw new Error(`Expert with id ${_id} not found`);
     res.json({ expert });
@@ -173,7 +168,7 @@ exports.singleExpBlog = async (req, res) => {
     if (!expBlog) throw new Error("Expert blogs not found");
     res.json({ expBlog });
   } catch (error) {
-    res.json({error})
+    res.json({ error });
     console.log(error);
   }
 };
@@ -181,7 +176,6 @@ exports.singleExpBlog = async (req, res) => {
 // To show expert name in blog page
 exports.expertName = async (req, res) => {
   try {
-    console.log(req.params);
     const { _id } = req.params;
     const expert = await expertName(_id);
     console.log(expert);
@@ -309,9 +303,11 @@ exports.profilePic = async (req, res) => {
 
 // To get the available slots
 exports.slots = async (req, res) => {
+  const date = req.query.key1
+  const _id = req.query.key2
+  
   try {
-    const { date } = req.params;
-    const slots = await findSlots(date);
+    const slots = await findSlots(date,_id);
     res.json({ slots });
   } catch (error) {
     console.log(error);
@@ -321,11 +317,9 @@ exports.slots = async (req, res) => {
 // To confirm user booked slot
 exports.ConfirmSlot = async (req, res) => {
   try {
-    const { slot } = req.body;
-    console.log(slot);
     const { userId } = req.body;
-    console.log(slot);
-    const confirm = await BookedSlot(slot, userId);
+    const { slot } = req.body;
+    const confirm = await BookedSlot(userId,slot);
     if (!confirm) throw new Error("Slot not confirmed");
     res.json({ success: "Slot booked successfully" });
   } catch (error) {
@@ -337,5 +331,5 @@ exports.uploadImage = async (req, res) => {
   const { _id } = req.params;
   const url = await uploadimage(req.body.image);
   const saveImg = await saveImgLink(_id, url);
-  console.log(saveImg,"ooooo");
+  console.log(saveImg, "ooooo");
 };

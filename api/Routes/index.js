@@ -52,7 +52,7 @@ router.get("/expert-blog/:_id", singleExpBlog)
 router.get("/expert-name/:_id", expertName)
 router.get("/stripe-key", stripePublicKey)
 router.get("/checkout-sessionId/:_id", sessionId)
-router.get("/slots/:date",slots)
+router.get("/slots",slots)
 
 router.patch("/verify-link", verifyLink);
 

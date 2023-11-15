@@ -73,6 +73,11 @@ const userSchema = new mongoose.Schema({
       ref: "Slot",
     },
   ],
+  booking: [
+    {
+      type:String
+    }
+  ],
   profile: {
     type: String,
   },
