@@ -1,7 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 require('dotenv').config()
 
-console.log("api key",process.env.CLOUDINARY_API_SECERT);
 
 cloudinary.config({
   cloud_name: "dkqcordxf",
