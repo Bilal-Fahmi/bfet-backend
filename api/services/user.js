@@ -210,7 +210,8 @@ exports.findSlots = async (date, _id) => {
 };
 
 // To save user booked slot
-exports.BookedSlot = async (userId, slot) => {
+exports.BookedSlot = async (userId, slot) => { 
+  
   console.log(slot);
   const updatedUser = await User.findByIdAndUpdate(
     { _id: userId },
