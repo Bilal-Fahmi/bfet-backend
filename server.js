@@ -7,6 +7,7 @@ const index = require("./api/Routes/index");
 const admin = require("./api/Routes/AdminRoute");
 const morgan = require("morgan");
 const cron = require("node-cron");
+const helmet = require("helmet")
 const { sendVideoLinkToEmail } = require("./api/Utils/VClinkScheduler");
 
 require("dotenv").config();
@@ -14,6 +15,7 @@ console.log(process.env.dbURL);
 
 require("./api/Config/database");
 
+app.use(helmet())
 app.use(morgan("dev"));
 console.log(__dirname);
 
