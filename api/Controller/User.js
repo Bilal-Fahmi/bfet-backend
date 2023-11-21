@@ -175,7 +175,8 @@ exports.singleExpBlog = async (req, res) => {
 
 // To show expert name in blog page
 exports.expertName = async (req, res) => {
-  try {
+  try { 
+    
     const { _id } = req.params;
     const expert = await expertName(_id);
     console.log(expert);
